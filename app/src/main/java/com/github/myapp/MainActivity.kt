@@ -2,12 +2,16 @@
 package com.github.myapp
 
 // Імпартуем неабходныя бібліятэкі Android і Compose
+import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.compose.BackHandler
@@ -40,11 +44,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
 // Кампазіцыйная функцыя для галоўнага экрана
 @Composable
 fun HappyQuestionScreen() {
+
     // Атрыманне гадзіны
     val currentHour = remember {
         Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
@@ -155,6 +161,22 @@ fun HappyQuestionScreen() {
     BackHandler(enabled = !buttonsVisible) {
         answer = "Ты счастлив?"
         buttonsVisible = true
+    }
+    BackHandler(enabled = buttonsVisible) {
+        val goodbyeList = listOf(
+            "Bye-bye!", "Tschüss!", "Au revoir!", "Do widzenia!", "Sbohem!",
+            "Tot ziens!", "Farvel!", "Adjö!", "Arrivederci!", "Adieu!",
+            "さようなら！", "Iki pasimatymo!", "Hei hei!", "Hoşça kal!", "Чао!",
+            "Zbogom!", "Até logo!", "Head aega!", "Αντίο!", "Do naslednjic!",
+            "La revedere!", "Wiedersinn!", "Ha det!", "До побачення!", "Да пабачэння!"
+        )
+
+        val message = goodbyeList.random()
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            (context as? Activity)?.finish()
+        }, 1500)
     }
 }
 
